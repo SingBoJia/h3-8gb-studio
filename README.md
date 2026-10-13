@@ -77,8 +77,9 @@ minimax-h3-8gb-studio/
 | `minimax_h3_ref2v_turbo_4step_v0.1_comfyui_bf16.safetensors`（参考图模式用） | `models\loras\` | 1.8 GB |
 
 > 多数文件在仓库的 `split_files\` 下按类型分目录；用仓库页面的文件搜索框按文件名搜即可。
-> 如遇下载受限（401 / 速度异常），可尝试 [hf-mirror.com](https://hf-mirror.com) 镜像，
-> 或社区量化仓库 [DmitryDB/MiniMax-H3-ComfyUI-Quants](https://huggingface.co/DmitryDB/MiniMax-H3-ComfyUI-Quants)。
+> - 如果提示 **401 / 要求登录**：先登录 Hugging Face 账号（部分模型仓库需要先在页面点同意条款再审阅下载）。
+> - 下载速度异常或连不上：可尝试 [hf-mirror.com](https://hf-mirror.com) 镜像，或社区量化仓库 [DmitryDB/MiniMax-H3-ComfyUI-Quants](https://huggingface.co/DmitryDB/MiniMax-H3-ComfyUI-Quants)。
+> - Hugging Face 的 Xet CDN 对部分网络不稳定，用浏览器直下或 `hf download` 工具比 `curl -C -` 续传更可靠。
 
 ### 2. 安装第三方节点（长视频衔接必需）
 
