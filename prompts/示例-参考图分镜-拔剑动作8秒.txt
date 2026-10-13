@@ -1,0 +1,28 @@
+subject_definitions:
+<Subject 1> (S1) is the young man whose appearance comes from <Picture 1> and <Picture 2>: short black hair, sharp amber eyes, wearing fitted black leather armor and a long black hooded cloak. The target video renders him as photorealistic live-action footage of a real human being, never as illustration, anime or 3D animation.
+<Subject 2> is the wrapped longsword in <Picture 3>: a slender blade with a dark leather-wrapped grip, a wire-wrapped crossguard and cloth strips trailing near the blade root.
+<Subject 3> is the environment shown in <Picture 4>: a night forest with twisted moss-covered trunks, cold blue mist, luminous blue-white mushrooms on the ground and roots, and pale moonlight through the canopy.
+
+summary:
+[reference generation] An eight-second photorealistic live-action tracking shot in which <Subject 1> (S1) moves through <Subject 3>, sweeps <Subject 2> out of its sheath, and cuts through a cloud of drifting spores.
+
+retention_analysis:
+<Subject 1> (appears in all shots): fully_preserved - identity, hairstyle, black leather armor and hooded cloak stay consistent in every shot, with real photographic skin texture and breathing.
+<Subject 2> (appears from [Shot 3] onward): fully_preserved - the wrapped grip, crossguard, trailing cloth strips and slender blade follow <Picture 3>.
+<Subject 3> (appears in all shots): partially_preserved - the forest, blue mist, glowing mushrooms and moonlight from <Picture 4> are reproduced as the setting, with added depth layers behind the subject.
+
+detailed_description:
+Photorealistic cinematic photography, sharp lenses, high dynamic range, extremely clean digital image with no film grain, no cel shading. Every moment contains real movement; there is no static panning or sliding of a frozen image.
+
+LIGHTING AND EXPOSURE ARE CRITICAL: <Subject 1> is the brightest element in every frame, clearly brighter than the dark forest behind him. A strong silver-blue moonbeam from above and to one side is his key light, with a warm glow from the luminous mushrooms filling his face from below; his skin reads bright and properly exposed, with visible pores, fine stubble and the wet sheen of his eyes. The camera stays in razor-sharp focus on his face and hands, and his expression is easy to read in every single shot. The overall exposure is balanced and readable: the forest, his armor and his hands are all clearly visible in rich mid-tones, and no frame is pitch black.
+
+[0s-2s] Shot 1: medium shot from the front, slightly to one side; <Subject 1> walks slowly toward the camera between the glowing mushrooms, his face lit by the moonlight and the mushroom glow, his cloak swaying with each step; the camera tracks backward ahead of him and the mist drifts around his boots.
+[2s-4s] Shot 2: close front-facing profile of his face as he scans the dark treeline, alert and calm; the camera drifts with him and settles tight on his eyes as he says <d>[Japanese] 行くぞ！</d>
+[4s-6s] Shot 3: medium shot; in one continuous fast motion he snaps <Subject 2> out of its sheath, a cold highlight flashing along the steel; the camera whips upward with the blade and holds on the raised sword.
+[6s-8s] Shot 4: medium-wide shot; he sweeps the sword through the mist and a burst of glowing spores swirls up around him, catching the light; the camera pulls back slowly as he settles into his finishing stance.
+
+overall_soundscape:
+Soft footsteps on damp moss, the light clink of armor and cloak cloth moving; at 2s his short Japanese line; from 4s the metallic friction of the blade leaving the sheath followed by a short sharp air-cutting whoosh with light forest reverb; from 6s the fine rustling of lifted spores and a low distant rumble. No subtitles, no on-screen text, no logos and no watermarks anywhere in the frame.
+
+non_diegetic_music:
+None. No background music and no melodic score; only the physical sounds described above.

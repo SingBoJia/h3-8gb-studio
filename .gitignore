@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# 运行产物
+comfy.log
+*.log
+*.mp4
+*.wav
+list.txt
+
+# 系统
+Thumbs.db
+desktop.ini
+.DS_Store

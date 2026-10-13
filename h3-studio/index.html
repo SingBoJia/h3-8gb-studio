@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MiniMax-H3 一键出片</title>
+<style>
+  :root {
+    --bg: #0f1115; --card: #171a21; --card2: #1e222b; --line: #2a2f3a;
+    --text: #e8eaf0; --dim: #9aa3b2; --accent: #4f8cff; --accent2: #3f6fe0;
+    --ok: #35c46a; --warn: #f0b429; --err: #ff5f56;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 15px/1.6 "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+  }
+  .wrap { max-width: 940px; margin: 0 auto; padding: 28px 20px 90px; }
+  h1 { font-size: 24px; margin: 0 0 4px; }
+  .sub { color: var(--dim); font-size: 13px; margin-bottom: 24px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 18px 20px; margin-bottom: 16px;
+  }
+  .card h2 { font-size: 16px; margin: 0 0 4px; display: flex; align-items: center; gap: 8px; }
+  .card .hint { color: var(--dim); font-size: 12.5px; margin: 0 0 12px; }
+  .num {
+    display: inline-flex; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 12px;
+    align-items: center; justify-content: center; flex: none;
+  }
+  textarea, select {
+    width: 100%; background: var(--card2); color: var(--text);
+    border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px;
+    font: inherit; resize: vertical;
+  }
+  textarea:focus, select:focus { outline: none; border-color: var(--accent); }
+  textarea { min-height: 66px; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .row > * { flex: 1 1 180px; }
+
+  /* ---- 分段卡片 ---- */
+  .seg {
+    border: 1px solid var(--line); border-radius: 12px; padding: 12px;
+    margin-bottom: 12px; background: #14171d;
+  }
+  .segHead { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .segTitle { font-weight: 600; font-size: 14px; }
+  .segHint { color: var(--dim); font-size: 12px; flex: 1; }
+  .del { cursor: pointer; color: var(--err); font-size: 12px; background: none; border: none; }
+  .segBody { display: flex; gap: 12px; align-items: flex-start; }
+  .segRight { flex: 1; min-width: 0; }
+  .imgSlot {
+    width: 104px; height: 104px; flex: none; border-radius: 10px;
+    border: 2px dashed var(--line); display: flex; align-items: center;
+    justify-content: center; text-align: center; color: var(--dim);
+    font-size: 12px; cursor: pointer; overflow: hidden; position: relative;
+    background: #12151a; transition: .15s;
+  }
+  .imgSlot:hover, .imgSlot.on { border-color: var(--accent); color: var(--text); }
+  .imgSlot.has { border-style: solid; border-color: var(--accent); }
+  .imgSlot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .imgSlot .rm {
+    position: absolute; top: 2px; right: 2px; width: 20px; height: 20px;
+    border-radius: 50%; background: rgba(0,0,0,.65); color: #fff; border: none;
+    cursor: pointer; font-size: 12px; line-height: 1;
+  }
+  .mode { display: flex; gap: 14px; align-items: center; margin-top: 8px; font-size: 13px; flex-wrap: wrap; }
+  .mode label { display: flex; align-items: center; gap: 5px; cursor: pointer; color: var(--dim); }
+  .mode label.active { color: var(--text); }
+  .mode input { accent-color: var(--accent); }
+  .mode .warn { color: var(--warn); font-size: 12px; }
+
+  .btn { border: none; border-radius: 12px; padding: 12px 18px; font: inherit; color: #fff; background: var(--card2); cursor: pointer; }
+  .btn.primary { background: linear-gradient(180deg, var(--accent), var(--accent2)); font-size: 17px; padding: 16px; width: 100%; font-weight: 600; }
+  .btn.primary:disabled { opacity: .5; cursor: not-allowed; }
+  .btn.small { padding: 8px 12px; font-size: 13px; }
+
+  .progress-wrap { margin-top: 16px; display: none; }
+  .bar { height: 10px; background: var(--card2); border-radius: 99px; overflow: hidden; border: 1px solid var(--line); }
+  .bar > i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), #7bb0ff); transition: width .6s; }
+  .stat { display: flex; justify-content: space-between; font-size: 13px; color: var(--dim); margin-top: 8px; }
+  .log { margin-top: 10px; font-size: 12.5px; color: var(--dim); white-space: pre-wrap; font-family: Consolas, monospace; }
+  .result { display: none; margin-top: 18px; }
+  .result video { width: 100%; border-radius: 12px; border: 1px solid var(--line); background: #000; }
+  .badge { font-size: 12px; padding: 2px 8px; border-radius: 99px; background: var(--card2); color: var(--dim); }
+  .tips { font-size: 12.5px; color: var(--dim); }
+  .tips b { color: var(--text); }
+  details summary { cursor: pointer; color: var(--dim); font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🎬 MiniMax-H3 一键出片</h1>
+  <div class="sub">每段都能配一张图 · 写几句提示词 → 自动分段生成并接成一条完整视频（本地跑，免费）</div>
+
+  <!-- 全局提示词 -->
+  <div class="card">
+    <h2><span class="num">1</span> 全局提示词 <span class="badge">整片统一</span></h2>
+    <p class="hint">整条片子都要保持一致的东西写这里：人物长相/服装、场景、画风、光线、镜头风格。每一段都会自动带上它。</p>
+    <textarea id="globalPrompt" placeholder="例：写实电影质感，同一位穿蓝色冲锋衣的年轻女子，黄昏海边，35mm 镜头，自然光，画面稳定清晰，环境声连续。"></textarea>
+  </div>
+
+  <!-- 分段 -->
+  <div class="card">
+    <h2><span class="num">2</span> 每一段拍什么 <span class="badge">每段可各配一张图</span></h2>
+    <p class="hint">
+      每段左边那个方块可以放一张图（点击或把图拖进去）。<br>
+      · 第 1 段的图 = 视频从哪里开始演　· 后面每段可以选「接着上一段演」（图当结尾）或「用图另起一段」（图当开头）。
+    </p>
+    <div id="segList"></div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn small" id="addSeg" style="flex:0 0 auto">＋ 加一段</button>
+      <button class="btn small" id="fillDemo" style="flex:0 0 auto;background:#22303f">填入示例</button>
+      <span class="tips" id="totalInfo"></span>
+    </div>
+  </div>
+
+  <!-- 设置 -->
+  <div class="card">
+    <h2><span class="num">3</span> 设置</h2>
+    <div class="row">
+      <label>每段时长
+        <input type="range" id="seconds" min="3" max="15" step="1" value="5" style="width:100%">
+        <span id="secLabel" class="tips">5 秒</span>
+      </label>
+      <label>画质
+        <select id="quality">
+          <option value="0.2">快（清晰度低一点，最省显存）</option>
+          <option value="0.25" selected>标准（推荐）</option>
+          <option value="0.4">清晰（慢一些）</option>
+        </select>
+      </label>
+      <label>画面比例
+        <select id="ratio">
+          <option value="1.7778" selected>横屏 16:9</option>
+          <option value="0.5625">竖屏 9:16（抖音/小红书）</option>
+          <option value="1">方形 1:1</option>
+        </select>
+      </label>
+      <label>接缝处理
+        <select id="xfade">
+          <option value="6" selected>柔和过渡（推荐）</option>
+          <option value="0">直接硬切</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <button class="btn primary" id="go">开始生成</button>
+
+  <div class="progress-wrap" id="progressWrap">
+    <div class="bar"><i id="barFill"></i></div>
+    <div class="stat"><span id="pDetail">准备中…</span><span id="pTime"></span></div>
+    <div class="log" id="pLog"></div>
+  </div>
+
+  <div class="result" id="result">
+    <div style="margin-bottom:10px">✅ 生成完成：<span id="outPath" class="tips"></span></div>
+    <video id="player" controls playsinline></video>
+    <div class="row" style="margin-top:12px">
+      <button class="btn small" id="openFolder" style="flex:0 0 auto">打开所在文件夹</button>
+      <a class="btn small" id="download" href="#" download style="flex:0 0 auto;text-decoration:none;display:inline-block;text-align:center">另存为…</a>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px">
+    <details>
+      <summary>提示词不会写？点开看小抄</summary>
+      <div class="tips" style="margin-top:10px">
+        <p><b>每段就写四件事：</b>在哪里 + 谁在做什么 + 镜头怎么动 + 什么声音。</p>
+        <p><b>两种拍法怎么选：</b>「接着上一段演」= 一镜到底的感觉，前后连贯；「用图另起一段」= 每段一张图各自成段，像分镜故事板，段与段之间会切换。</p>
+        <p><b>配图小技巧：</b>后面的段落如果既想接上一段、又给了一张图，模型会让这一段<b>演到那张图为止</b>，很适合控制结尾画面。</p>
+        <p><b>例子：</b>第 1 段「黄昏的沙滩上，她慢慢向前走，海浪在身后翻滚，镜头缓慢推近，海鸥声和浪声。」</p>
+      </div>
+    </details>
+  </div>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let polling = null;
+let segUid = 0;          // 给每段的单选按钮一个独立名字，保证互斥
+
+/* ---------------- 分段（每段：图片 + 提示词 + 接法） ---------------- */
+function addSegment(opt = {}) {
+  const uid = ++segUid;
+  const el = document.createElement('div');
+  el.className = 'seg';
+  el.innerHTML = `
+    <div class="segHead">
+      <span class="segTitle">第 1 段</span>
+      <span class="segHint"></span>
+      <button class="del" type="button">删除</button>
+    </div>
+    <div class="segBody">
+      <div class="imgSlot" title="点击选图，或把图片拖进来">
+        <div class="ph">＋<br>加图</div>
+        <input type="file" accept="image/*" hidden>
+      </div>
+      <div class="segRight">
+        <textarea placeholder="这一段拍什么：在哪里、谁在做什么、镜头怎么动、什么声音"></textarea>
+        <div class="mode">
+          <label><input type="radio" name="mode-${uid}" value="chain"> 接着上一段演</label>
+          <label><input type="radio" name="mode-${uid}" value="restart"> 用图另起一段</label>
+          <span class="warn"></span>
+        </div>
+      </div>
+    </div>`;
+  el.querySelector('textarea').value = opt.prompt || '';
+  el.querySelector('.mode').querySelector('input[value="chain"]').checked = true;
+
+  const slot = el.querySelector('.imgSlot');
+  const fileInput = el.querySelector('input[type=file]');
+  slot.onclick = (e) => { if (!e.target.classList.contains('rm')) fileInput.click(); };
+  fileInput.onchange = (e) => e.target.files[0] && setImage(el, e.target.files[0]);
+  ['dragover', 'dragenter'].forEach(ev => slot.addEventListener(ev, e => { e.preventDefault(); slot.classList.add('on'); }));
+  ['dragleave', 'drop'].forEach(ev => slot.addEventListener(ev, e => { e.preventDefault(); slot.classList.remove('on'); }));
+  slot.addEventListener('drop', e => { const f = e.dataTransfer.files[0]; if (f) setImage(el, f); });
+
+  el.querySelector('.del').onclick = () => { el.remove(); refresh(); };
+  el.querySelectorAll('.mode input').forEach(r => r.onchange = refresh);
+  el.querySelector('textarea').oninput = () => {};
+  $('segList').appendChild(el);
+  refresh();
+}
+
+function setImage(el, file) {
+  const r = new FileReader();
+  r.onload = () => {
+    el.dataset.img = r.result;
+    el.dataset.imgName = file.name;
+    const slot = el.querySelector('.imgSlot');
+    slot.classList.add('has');
+    slot.innerHTML = `<img src="${r.result}"><button class="rm" title="移除">✕</button>
+                      <input type="file" accept="image/*" hidden>`;
+    const fi = slot.querySelector('input[type=file]');
+    fi.onchange = (e) => e.target.files[0] && setImage(el, e.target.files[0]);
+    slot.querySelector('.rm').onclick = (e) => {
+      e.stopPropagation();
+      delete el.dataset.img; delete el.dataset.imgName;
+      slot.classList.remove('has');
+      slot.innerHTML = `<div class="ph">＋<br>加图</div><input type="file" accept="image/*" hidden>`;
+      const f2 = slot.querySelector('input[type=file]');
+      f2.onchange = (e) => e.target.files[0] && setImage(el, e.target.files[0]);
+      refresh();
+    };
+    refresh();
+  };
+  r.readAsDataURL(file);
+}
+
+function segInfo(el, i) {
+  return {
+    idx: i,
+    prompt: el.querySelector('textarea').value,
+    image: el.dataset.img || null,
+    imageName: el.dataset.imgName || null,
+    chain: el.querySelector('.mode input[value="chain"]').checked,
+    first: i === 1,
+  };
+}
+
+function refresh() {
+  const segs = [...$('segList').children];
+  segs.forEach((el, i) => {
+    const n = i + 1;
+    el.querySelector('.segTitle').textContent = `第 ${n} 段`;
+    const info = segInfo(el, n);
+    const modeBox = el.querySelector('.mode');
+    modeBox.style.display = n === 1 ? 'none' : 'flex';
+    const chainRadio = modeBox.querySelector('input[value="chain"]');
+    const restartRadio = modeBox.querySelector('input[value="restart"]');
+    if (!chainRadio.checked && !restartRadio.checked) chainRadio.checked = true;
+    modeBox.querySelectorAll('label').forEach(l => {
+      const r = l.querySelector('input');
+      l.classList.toggle('active', r.checked);
+    });
+    const warn = el.querySelector('.warn');
+    warn.textContent = (!info.image && restartRadio.checked) ? '这个模式需要一张图片' : '';
+
+    let hint = '';
+    if (n === 1) {
+      hint = info.image ? '视频从这张图开始演' : '没放图 → 纯文字生成';
+    } else if (info.chain) {
+      hint = info.image ? '接着上一段演，最后演到这张图为止' : '接着上一段继续演';
+    } else {
+      hint = info.image ? '这一段从这张图重新开始（与上一段会有切换）' : '需要放一张图';
+    }
+    el.querySelector('.segHint').textContent = hint;
+  });
+  const n = segs.length;
+  const sec = +$('seconds').value;
+  const net = n * sec - (n > 1 ? 2.33 * (n - 1) : 0);
+  $('totalInfo').textContent = `共 ${n} 段，预计成片约 ${net.toFixed(0)} 秒`;
+}
+
+$('addSeg').onclick = () => addSegment();
+$('seconds').oninput = () => { $('secLabel').textContent = $('seconds').value + ' 秒'; refresh(); };
+$('fillDemo').onclick = () => {
+  $('globalPrompt').value = '写实电影质感，同一位穿蓝色冲锋衣的年轻女子，黄昏的海边，35mm 镜头，自然光，画面稳定清晰，环境声连续。';
+  $('segList').innerHTML = '';
+  addSegment({ prompt: '黄昏的沙滩上，她慢慢向前走，海浪在身后翻滚，镜头缓慢推近，海鸥声和浪声。' });
+  addSegment({ prompt: '她停下脚步望向海面，夕阳更低了，镜头继续缓慢推近到侧脸，风声浪声持续。' });
+};
+
+/* ---------------- 尺寸换算（百万像素 -> 宽高，对齐 32） ---------------- */
+function resolveSize(mp, ratio) {
+  const r32 = (v) => Math.max(32, Math.round(v / 32) * 32);
+  const w = r32(Math.sqrt(mp * 1e6 * ratio));
+  const h = r32(w / ratio);
+  return [w, h];
+}
+
+/* ---------------- 开始生成 ---------------- */
+$('go').onclick = async () => {
+  const segs = [...$('segList').children].map((el, i) => segInfo(el, i + 1))
+    .filter(s => s.prompt.trim() || s.image);
+  if (!segs.length) { alert('至少要写一段提示词'); return; }
+  if (segs.some(s => !s.prompt.trim())) { alert('每一段都要写提示词（配了图也要写）'); return; }
+  const bad = segs.findIndex(s => !s.first && !s.chain && !s.image);
+  if (bad >= 0) {
+    alert(`第 ${bad + 1} 段选了「用图另起一段」，但还没有配图。\n请给它放一张图，或把模式改回「接着上一段演」。`);
+    return;
+  }
+  const mp = +$('quality').value, ratio = +$('ratio').value;
+  const [w, h] = resolveSize(mp, ratio);
+  const body = {
+    global_prompt: $('globalPrompt').value,
+    seconds: +$('seconds').value,
+    width: w, height: h, crossfade: +$('xfade').value,
+    segments: segs.map(s => ({
+      prompt: s.prompt, image: s.image, image_name: s.imageName,
+      chain: s.first ? false : s.chain,
+    })),
+  };
+  $('go').disabled = true;
+  $('result').style.display = 'none';
+  $('progressWrap').style.display = 'block';
+  $('pDetail').textContent = '正在提交任务…';
+  $('barFill').style.width = '4%';
+  try {
+    const r = await fetch('/api/start', { method: 'POST', body: JSON.stringify(body) });
+    const j = await r.json();
+    if (j.error) throw new Error(j.error);
+    poll(j.job);
+  } catch (e) {
+    $('pDetail').textContent = '提交失败：' + e.message;
+    $('go').disabled = false;
+  }
+};
+
+function fmt(sec) {
+  sec = Math.max(0, Math.round(sec || 0));
+  const m = Math.floor(sec / 60), s = sec % 60;
+  return m ? `${m} 分 ${s} 秒` : `${s} 秒`;
+}
+
+function poll(job) {
+  clearInterval(polling);
+  polling = setInterval(async () => {
+    let st;
+    try { st = await (await fetch('/api/status?job=' + job)).json(); } catch { return; }
+    const total = st.total || 1;
+    const idx = Math.max(0, (st.segment || 1) - 1);
+    let pct = (idx + 0.35) / total * 100;
+    if (st.state === 'assembling') pct = 96;
+    if (st.state === 'done') pct = 100;
+    $('barFill').style.width = pct.toFixed(0) + '%';
+    $('pDetail').textContent = st.detail || st.state;
+    $('pTime').textContent = st.elapsed ? `已用 ${fmt(st.elapsed)}` + (st.eta ? ` · 大约还要 ${fmt(st.eta)}` : '') : '';
+    $('pLog').textContent = (st.log_tail || []).join('\n');
+
+    if (st.state === 'done') {
+      clearInterval(polling);
+      $('go').disabled = false;
+      $('result').style.display = 'block';
+      $('outPath').textContent = st.saved_to || st.output || '';
+      $('player').src = '/api/video?job=' + job;
+      $('download').href = '/api/video?job=' + job;
+      $('openFolder').onclick = () => fetch('/api/open', { method: 'POST', body: JSON.stringify({ path: st.saved_to || st.output }) });
+      $('result').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else if (st.state === 'error') {
+      clearInterval(polling);
+      $('go').disabled = false;
+      $('pDetail').textContent = '出错了：' + (st.error || '未知错误');
+    }
+  }, 2500);
+}
+
+/* 初始化 */
+addSegment();
+refresh();
+</script>
+</body>
+</html>
