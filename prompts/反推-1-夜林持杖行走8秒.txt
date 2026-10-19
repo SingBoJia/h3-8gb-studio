@@ -1,0 +1,26 @@
+subject_definitions:
+<Subject 1> (S1) is a young man rendered in high-quality modern Japanese anime style: short black hair falling over one eye, sharp golden-amber eyes, pale skin, wearing a fitted dark outfit, long black gloves and a flowing black hooded cloak. He carries a tall wooden staff with a wrapped grip near the top.
+<Subject 2> is the environment: a mystical night forest of twisted dark trees, its floor carpeted with glowing cyan-blue bioluminescent mushrooms and moss, with pale moonbeams filtering down through the canopy.
+
+summary:
+An eight-second anime-style night sequence in which <Subject 1> (S1) walks through <Subject 2> carrying his staff; the camera moves from a low close tracking shot up to a full silhouette under moonbeams, then dives into intimate close-ups of his cloak, his golden eyes and his gloved hands on the staff.
+
+retention_analysis:
+<Subject 1> (appears in all shots): fully_preserved - the same hairstyle, golden-amber eyes, black gloves, black hooded cloak and wooden staff stay consistent in every shot.
+<Subject 2> (appears in all shots): fully_preserved - the glowing blue mushroom floor, twisted dark trees and moonbeams remain the constant setting.
+
+detailed_description:
+High-quality modern Japanese anime cel shading, deep blue-black palette, soft volumetric moonlight, clean line art, no film grain, no live-action texture. Every moment contains real movement; there is no static panning or sliding of a frozen image.
+
+[0s-1.3s] Shot 1: low close tracking shot beside <Subject 1> as he walks forward; his hooded head and shoulders fill the lower frame, the wooden staff crossing the frame diagonally, glowing blue mushrooms passing beneath his steps; the camera tracks along with him.
+[1.3s-2.7s] Shot 2: the staff swings closer across the frame as he strides on; the mushroom field drifts past below; a slight camera bob matches his footsteps.
+[2.7s-4s] Shot 3: cut to a wide shot; <Subject 1>'s full silhouette stands amid the dark forest, pale moonbeams slanting down through the canopy onto the glowing mushroom carpet; the camera cranes up slowly.
+[4s-5.3s] Shot 4: extreme close-up of the black cloak fabric rippling in the breeze, the folds catching faint blue light; the camera drifts slowly across the texture.
+[5.3s-6.7s] Shot 5: close-up of <Subject 1>'s face; black hair over one eye, golden-amber eyes steady and serious, faint rim light tracing his cheek; the camera pushes in slightly and holds.
+[6.7s-8s] Shot 6: close-up of his black-gloved hands tightening on the wrapped grip of the wooden staff; sleeve and cloak shifting subtly; the camera settles on the grip as the clip ends.
+
+overall_soundscape:
+Soft footsteps on damp moss, the low rustle of the cloak, an occasional wooden tap of the staff touching the ground; continuous night-forest ambience with faint wind over a dark subdued underscore. No dialogue, no subtitles, no on-screen text, no logos and no watermarks anywhere in the frame.
+
+non_diegetic_music:
+A low, dark ambient underscore runs under the whole clip.

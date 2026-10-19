@@ -1,0 +1,29 @@
+subject_definitions:
+<Subject 1> (S1) is the same young man rendered in high-quality modern Japanese anime style: short black hair falling over one eye, sharp golden-amber eyes, pale skin, wearing a dark hooded garment, a fitted black outfit and a single black glove on his right hand.
+<Subject 2> is a slender longsword with a bright silver-white blade that emits a soft cold glow.
+<Subject 3> is the environment: a dark night forest with tall shadowy trees, cold blue ambient light and faint glowing blue plants on the forest floor.
+
+summary:
+A twelve-second anime-style character reveal sequence in which <Subject 1> (S1) wakes, opens his golden eyes, draws <Subject 2>, reaches toward the viewer and ends with a confident smile, closing on a full-body hero stance inside <Subject 3>.
+
+retention_analysis:
+<Subject 1> (appears in all shots): fully_preserved - identical hairstyle, golden-amber eyes, dark hooded garment and black glove in every shot.
+<Subject 2> (appears from [Shot 4] onward): fully_preserved - the same silver-white glowing blade in every appearance.
+<Subject 3> (appears in the opening ambience and the final shot): partially_preserved - the blue-lit dark forest frames the sequence and returns for the closing full-body shot.
+
+detailed_description:
+High-quality modern Japanese anime cel shading, deep blue-black palette contrasting with the character's pale skin and bright golden eyes, clean line art, no film grain, no live-action texture. Every moment contains real movement; there is no static panning or sliding of a frozen image.
+
+[0s-1.3s] Shot 1: close-up of <Subject 1>'s face in three-quarter profile, eyes closed or looking down, dark hair partly covering his face, calm and still; the camera pushes in slowly.
+[1.3s-2.5s] Shot 2: extreme close-up of the lower face, lips and jawline with a slight frown; the camera tilts subtly and lingers on the mouth.
+[2.5s-4s] Shot 3: bust shot frontal; his golden eyes open and fix forward with a serious gaze, the dark hood framing his face; the camera nudges in.
+[4s-6s] Shot 4: chest-up shot as he raises <Subject 2>; the silver-white blade glows with cold light against the darkness; the camera follows the blade's arc upward.
+[6s-7.5s] Shot 5: close-up of his black-gloved hand reaching toward the viewer, fingers slightly spread, his intense golden eyes visible behind the hand; the camera racks focus between hand and eyes.
+[7.5s-9s] Shot 6: close-up portrait; the corner of his mouth pulls into a confident smile, golden eyes bright and clear; the camera holds steady.
+[9s-12s] Shot 7: the camera pulls back and widens to a full-body hero shot of <Subject 1> standing in <Subject 3>, cloak settling, blade held at his side, blue glow rising around his boots; the camera comes to rest on the complete stance.
+
+overall_soundscape:
+Quiet breathing and cloth rustle through the opening close-ups; from 4s the cold metallic ring of the blade and a short airy swish as it is raised; from 9s a soft low whoosh as the camera pulls back with faint wind ambience. A young adult male voice may breathe softly but no dialogue; no subtitles, no on-screen text, no logos and no watermarks anywhere in the frame.
+
+non_diegetic_music:
+A restrained dark underscore swells gently at the final full-body shot.

@@ -1,4 +1,4 @@
-# MiniMax-H3 8GB 显存本地出片工具箱
+# h3-8gb-studio — MiniMax-H3 8GB 显存本地出片工具箱
 
 > 在 **8GB 显存** 的消费级显卡上把 MiniMax-H3 视频生成跑顺手的全套方案：
 > 中文「一键出片」网页、多段拼接长视频（1~2 分钟）、参考图模式（人物 / 道具 / 场景）、
@@ -34,9 +34,9 @@
 ## 目录结构
 
 ```
-minimax-h3-8gb-studio/
+h3-8gb-studio/
 ├── install.ps1                 # 安装：拷贝脚本到 ComfyUI 目录 + 建桌面快捷方式 + 检查模型
-├── launch-h3.ps1               # ComfyUI 启动器（预留 0.6GB 显存给桌面）
+├── launch-h3.ps1               # ComfyUI 启动器（预留 0.6GB 显存给桌面，默认关 pinned memory）
 ├── make-h3-film.ps1            # 问答式长视频制作
 ├── h3-make-film.ps1            # 长视频核心脚本（分段 + Motion Context 衔接 + 拼接）
 ├── h3-studio/                  # 一键出片网页应用
@@ -48,8 +48,9 @@ minimax-h3-8gb-studio/
 │   └── h3_post.py              #   提亮 / 锐化 / 插帧
 ├── workflows/                  # ComfyUI 工作流（拖进网页即可用）
 ├── custom_nodes/comfyui-h3-segment-prompt/   # 自建小节点：全局+分段提示词
-├── prompts/                    # 参考图模式的六段式提示词示例
-└── docs/使用说明.md             # 详细操作手册
+├── prompts/                    # 提示词模板与示例（六段式参考图 / 分镜 / 反推）
+├── docs/使用说明.md             # 详细操作手册
+└── video/                      # 测试与示例成片（不入库，见 .gitignore）
 ```
 
 ---
@@ -133,6 +134,29 @@ MiniMax-H3 单段最长 15 秒；更长要靠分段 + 衔接：
 - 段间用 [ComfyUI-H3-Motion-Context](https://github.com/NikoDemon80/ComfyUI-H3-Motion-Context) 的运动上下文衔接（`context_length` 只能取 5/22/39/56，56 帧 ≈ 2.33 秒；`audio_context_length` 取 24 的倍数）。
 - 实测量化效果：带衔接的接缝 PSNR ≈ 25.8dB，无衔接 ≈ 12.3dB。
 
+### 启动器参数（`launch-h3.ps1`）
+
+```powershell
+# 默认：预留 0.6GB 显存给桌面，并关闭 pinned memory
+.\launch-h3.ps1
+
+# 自定义端口 / 显存预留
+.\launch-h3.ps1 -Port 8189 -ReserveVram 1.0
+
+# 只启动不开浏览器
+.\launch-h3.ps1 -NoBrowser
+
+# 显存/内存紧张时，可再关闭以下特性（按需单独使用）
+.\launch-h3.ps1 -DisableDynamicVram
+.\launch-h3.ps1 -DisableMmap
+.\launch-h3.ps1 -DisableAsyncOffload
+```
+
+> `--disable-pinned-memory` 已默认开启。本机实测（16GB 页面文件 + 64GB 内存）开启 pinned memory 时，
+> aimdo 宿主缓冲会把提交量顶到上限（81.4/81.6 GB）并报 `GetOverlappedResult error=1450 / os error 1455`，
+> 加载权重即失败；关闭后提交量峰值约 57GB 且出片正常。
+> 注意：`-DisableDynamicVram`、`-DisableMmap`、`-DisableAsyncOffload` **三项同时关闭**会导致加载 UNet 时进程级崩溃。
+
 ---
 
 ## 技术笔记（踩过的坑）
@@ -145,6 +169,7 @@ MiniMax-H3 单段最长 15 秒；更长要靠分段 + 衔接：
 - **Motion Context 的一个细节**：开启了衔接的段会丢弃 first_frame 锚点（钉住的头占了那个位置），但保留 last_frame 锚点。
 - **PowerShell 脚本编码**：本仓库 `.ps1` 一律 UTF-8 **带 BOM**，否则 PowerShell 5.1 读中文会乱码报语法错。
 - **ffmpeg 拼接**：concat 列表文件不能带 BOM，用 `[IO.File]::WriteAllLines(..., UTF8Encoding($false))`。
+- **ffmpeg 查找**：脚本会依次搜索 PATH、`LOCALAPPDATA`、`Program Files` 等位置；无权限的候选路径会跳过而不会中断整个查找。
 
 ---
 
@@ -152,6 +177,9 @@ MiniMax-H3 单段最长 15 秒；更长要靠分段 + 衔接：
 
 **Q: 提示显存不足 / 跑到一半很卡？**
 把画质调低、每段时长调短；关掉游戏和浏览器标签页。8GB 显存下 640×384 是性价比甜点。
+
+**Q: 加载模型时报 `error=1450` / `os error 1455`，或提交内存爆掉？**
+这是 pinned memory 把系统提交量顶满导致的。`launch-h3.ps1` 和 `h3-studio/server.py` 已默认加 `--disable-pinned-memory`；如果你自己手写启动命令，请补上这个参数。
 
 **Q: 网页打不开？**
 再双击一次「MiniMax-H3 一键出片」，它会自己把服务拉起来；ComfyUI 没开也会自动拉起。

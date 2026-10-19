@@ -65,7 +65,15 @@ function Resolve-FfmpegPath([string]$Hint) {
     $cands += (Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Links\ffmpeg.exe')
     $cands += "$env:ProgramFiles\ffmpeg\bin\ffmpeg.exe"
     $cands += "${env:ProgramFiles(x86)}\ffmpeg\bin\ffmpeg.exe"
-    foreach ($c in $cands) { if ($c -and (Test-Path $c)) { return $c } }
+    foreach ($c in $cands) {
+        if (-not $c) { continue }
+        try {
+            if (Test-Path -LiteralPath $c -PathType Leaf -ErrorAction Stop) { return $c }
+        } catch {
+            # 无权访问某个候选路径时继续搜索其他 FFmpeg 位置。
+            continue
+        }
+    }
     throw "找不到 ffmpeg.exe。请安装 ffmpeg 并加入 PATH，或用 -Ffmpeg 参数指定完整路径。"
 }
 $Ffmpeg = Resolve-FfmpegPath $Ffmpeg

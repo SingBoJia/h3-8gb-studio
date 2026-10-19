@@ -68,8 +68,11 @@ def ensure_comfy(log):
         return True
     log("ComfyUI 没在运行，正在自动启动…")
     flags = 0x08000000 if os.name == "nt" else 0   # CREATE_NO_WINDOW
+    # 本机实测：pinned memory 会把提交量顶到上限导致 aimdo 宿主缓冲读失败，
+    # 关闭后提交量回落且出片正常。
     subprocess.Popen([COMFY_PY, "-s", COMFY_MAIN, "--port", "8188",
-                      "--reserve-vram", "0.6", "--disable-auto-launch"],
+                      "--reserve-vram", "0.6", "--disable-auto-launch",
+                      "--disable-pinned-memory"],
                      cwd=os.path.join(COMFY_ROOT, "ComfyUI"), creationflags=flags)
     deadline = time.time() + 300
     while time.time() < deadline:
